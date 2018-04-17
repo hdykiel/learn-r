@@ -119,3 +119,15 @@ Please make sure to
 Take a look at https://github.com/henningsway/r2anki-notebooks. Please consider providing the cards you wrote to other users as well. Thank you! :) 
 <!-- end backside -->
 
+
+******************
+#### Quotation marks
+<!-- #tags: R programming, Level2 -->
+**How would you save a character string, such as `"He said "Hello""`, given that it contains quotation marks?**
+
+<!-- start backside -->
+Two possible options:  
+1. Insert a backslash in front of the true quote: `var <- "He said \"Hello\""`  
+2. Use single quotation marks: `var <- 'He said "Hello"'`
+<!-- end backside -->
+
