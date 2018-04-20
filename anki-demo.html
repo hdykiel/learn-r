@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>r2anki-Notebook: How to use r2anki</title>
+
+<script src="anki-demo_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="anki-demo_files/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="anki-demo_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="anki-demo_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="anki-demo_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="anki-demo_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="anki-demo_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="anki-demo_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="anki-demo_files/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">r2anki-Notebook: How to use r2anki</h1>
+
+</div>
+
+
+<!-- #globaltags:  add, global, tags here-->
+<div id="working-with-r2anki" class="section level1">
+<h1>Working with r2anki</h1>
+<p>This document demonstrates how you may use the r2anki-package.</p>
+<p>To do this, a few Anki-cards are defined below, which you can import into Anki. If you do your homework there, you shouldn’t easily forget how to work with this package any longer. ;-)</p>
+<div id="general-information" class="section level2">
+<h2>General Information</h2>
+<hr />
+<div id="what-is-r2anki" class="section level4">
+<h4>What is r2anki</h4>
+<!-- #tags:  -->
+<p><strong>What can you use this package for?</strong></p>
+<!-- start backside -->
+<p>r2anki brings R to <a href="ankisrs.net/">Anki</a>. It allows you to easily create Anki-cards with R Markdown in R, which you can than export to Anki. There you can study and rehearse the cards to effectively expand your R-vocabulary. <!-- end backside --></p>
+<hr />
+</div>
+<div id="what-is-spaced-repitition" class="section level4">
+<h4>What is Spaced Repitition?</h4>
+<!-- #tags:  -->
+<p><strong>Whats the idea behind it and why is it useful?</strong></p>
+<!-- start backside -->
+<p>Spaced Repition is a <em>learning technique</em>, that helps you to learn and remember new knowledge effectively. It accounts for the fact, that well-know material needs to be rehearsed much less often than new material. Ideally the optimal time interval for every card is estimated individually, which is for example implemented in the Anki-algorithm.</p>
+<p>Learn more about <a href="https://en.wikipedia.org/wiki/Spaced_repetition">Spaced Repitition on Wikipedia</a>. <!-- end backside --></p>
+</div>
+</div>
+<div id="necessary-preparations-required-only-once" class="section level2">
+<h2>Necessary preparations (required only once)</h2>
+<hr />
+<div id="requirements-of-using-r2anki" class="section level4">
+<h4>Requirements of Using r2anki</h4>
+<!-- #tags: ** -->
+<p><strong>Which software do you need to install prior to using r2anki?</strong></p>
+<!-- start backside -->
+<p>Because r2anki connects <em>R</em> to <em>Anki</em>. You need to have (<em>R</em> and) Anki installed. You should also import the r2anki-Notetype to Anki, so that the markup for the Anki-cards looks nice.</p>
+<p><code>r2anki::install_anki()</code> is a little function to help get you started. :-) <!-- end backside --></p>
+<hr />
+</div>
+<div id="r2anki-initialization" class="section level4">
+<h4>r2anki-Initialization</h4>
+<!-- #tags: ** -->
+<p><strong>When you first want to use r2anki, you need to initialize Anki</strong> Why is this necessary and how do you do it?</p>
+<!-- start backside -->
+<p>In Anki the styling of the cards is defined by “Note Types”, which may contain html and CSS-information. <code>r2anki::r2anki(init = TRUE)</code> will copy a few Anki-cards with the r2anki-styling to Anki, so that the R Markdown-output can be rendered properly. <!-- end backside --></p>
+</div>
+</div>
+<div id="working-with-r2anki-1" class="section level2">
+<h2>Working with r2anki</h2>
+<hr />
+<div id="how-do-you-create-your-own-r2anki-notebook" class="section level4">
+<h4>How do you create your own r2anki-notebook?</h4>
+<!-- #tags:  -->
+<!-- start backside -->
+<p>You can give yourself a headstart by using the R Markdown-Template, that comes with r2anki. You can also use the RStudio-addin to add a new card to your notebook.</p>
+<p>Basically <em>any</em> R Markdown-file, that contains r2anki-cards (defined by a certain markup) can be parsed to an Anki-deck. <!-- end backside --></p>
+<hr />
+</div>
+<div id="how-do-you-export-cards-from-an-r2anki-notbook-to-anki" class="section level4">
+<h4>How do you export cards from an r2anki-notbook to Anki?</h4>
+<!-- #tags:  -->
+<p><strong>How do you get your cards from the r2anki-notebook exported to Anki?</strong></p>
+<!-- start backside -->
+<p>You just save the r2anki-notebook and call <code>r2anki::r2anki()</code> on the Rmd-file. When you set <code>invoke_anki = TRUE</code> Anki will automatically be started, ready to import your cards. <!-- end backside --></p>
+<hr />
+</div>
+<div id="how-to-import-r2anki-cards-into-anki" class="section level4">
+<h4>How to import r2anki-cards into Anki</h4>
+<!-- Tags:  -->
+<p><strong>What should be kept in mind to ensure a sucessful import of r2anki-cards?</strong></p>
+<!-- start backside -->
+<p>Please make sure to</p>
+<ul>
+<li>choose r2anki as the Note-Type of the Anki-cards</li>
+<li>check that Anki correctly recognises the file as tab seperated (manually enter otherwise)</li>
+<li>check the box “Allow HTML in fields”, so that the cards are recognized as containing html-markup <!-- end backside --></li>
+</ul>
+<hr />
+</div>
+<div id="where-can-you-look-for-other-r2anki-decks" class="section level4">
+<h4>Where can you look for other r2anki-decks?</h4>
+<!-- #tags:  -->
+<p><strong>Writing cards seems take some effort. Where can I find existing r2nki-decks?</strong></p>
+<!-- start backside -->
+<p>Take a look at <a href="https://github.com/henningsway/r2anki-notebooks" class="uri">https://github.com/henningsway/r2anki-notebooks</a>. Please consider providing the cards you wrote to other users as well. Thank you! :) <!-- end backside --></p>
+<hr />
+</div>
+<div id="quotation-marks" class="section level4">
+<h4>Quotation marks</h4>
+<!-- #tags: R programming, Level2 -->
+<p><strong>How would you save a character string, such as <code>&quot;He said &quot;Hello&quot;&quot;</code>, given that it contains quotation marks?</strong></p>
+<!-- start backside -->
+<p>Two possible options:<br />
+1. Insert a backslash in front of the true quote: <code>var &lt;- &quot;He said \&quot;Hello\&quot;&quot;</code><br />
+2. Use single quotation marks: <code>var &lt;- 'He said &quot;Hello&quot;'</code> <!-- end backside --></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
