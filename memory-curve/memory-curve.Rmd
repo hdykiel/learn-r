@@ -1,0 +1,73 @@
+---
+title: "Memory Curve"
+author: "Hadrien Dykiel"
+date: "8/23/2018"
+output: html_document
+references:
+  - id: wikipedia
+    title: artile-title
+    URL: 'page-url'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(scales)
+```
+
+## Forgetting curve
+
+The forgetting curve can be approximated with the following formula:
+
+$$
+R=e^{- \frac{t}{S}}
+$$
+
+$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory. $S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $t$ represents time.
+
+```{r}
+# Simulate the Hermann Ebbinghaus Curve
+
+# Recall 0
+S <- 3 # original stickiness of memory (stability)
+t <- c(0:30) # time in days
+
+R <- sapply(t, function(x) exp(1)^(-x/S)) # calculate retrievability
+
+df <- data.frame(t, R, recall.number = 0)
+
+
+datalist = list()
+
+for (i in seq(1,20,5)) {
+    # ... make some data
+    
+    dat <- data.frame(days = t, retrievability = sapply(t + 1 - i,function(x) exp(1)^(-x/S)))
+    dat$i <- i -1  # maybe you want to keep track of which iteration produced it?
+    datalist[[i]] <- dat # add it to your list
+    t <- t + 5
+    S <- S + 5
+}
+
+big_data = do.call(rbind, datalist)
+# or big_data <- dplyr::bind_rows(datalist)
+# or big_data <- data.table::rbindlist(datalist)
+
+
+# Plot graph
+ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  ggtitle(label = "The Forgetting Curve")
+
+
+```
+
+[ -@wikipedia]
+
+Some useful links: 
+[University of Warterloo: Curve of forgetting]("https://uwaterloo.ca/campus-wellness/curve-forgetting) 
+
+## Spaced repitition
+
+Several algorithms are available. The most simple is [Leitner's System]("https://en.wikipedia.org/wiki/Spaced_repetition")

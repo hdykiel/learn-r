@@ -1,16 +1,25 @@
-remember-R
+Lessons from learning foreign languages
 ========================================================
 author: Hadrien
-date: May 2018
+date: September 2018
 autosize: true
 
-What is that function again?
+
+Polygot Myths
 ========================================================
+- "Polygots are naturally gifted" 
+- "Polygots have incredible memories" 
+- "Polygots have more free time than normal people"
 
-Memory: it's normal to forget
+Polygot Truths
+===============
+- "Polygots have discovered specific hacks for learning and memorizing languages which you can also use" 
 
-- Choose what you want to remember
-- Apply memory techniques to remember that information
+
+Working memory vs. long term memory
+===================================
+- working memory: limited space 
+- long term memory: a quadrillion connections (15,000,000,000,000,000)
 
 
 
@@ -27,6 +36,19 @@ incremental: true
 # cannot allocate vector of size 3.1 gb
 ```
 
+
+What is that function again?
+========================================================
+
+Memory: it's normal to forget
+
+- Choose what you want to remember
+- Apply memory techniques to remember that information
+
+
+
+
+
 Your brain knows what's important
 ========================================================
 
@@ -35,5 +57,86 @@ Your brain knows what's important
 * Does it have meaning?
 * Is it memorable?
 * Recall frequency
+
+
+The Forgetting Curve
+====================
+
+
+```{r, echo = FALSE, fig.width= 28, fig.height=9}
+library(ggplot2)
+# Simulate the Hermann Ebbinghaus Curve
+
+# Recall 0
+S <- 3 # original stickiness of memory (stability)
+t <- c(0:30) # time in days
+
+R <- sapply(t, function(x) exp(1)^(-x/S)) # calculate retrievability
+
+df <- data.frame(t, R, recall.number = 0)
+
+
+datalist = list()
+
+for (i in seq(1,20,5)) {
+    # ... make some data
+    
+    dat <- data.frame(days = t, retrievability = sapply(t + 1 - i,function(x) exp(1)^(-x/S)))
+    dat$i <- i -1  # maybe you want to keep track of which iteration produced it?
+    datalist[[i]] <- dat # add it to your list
+    t <- t + 5
+    S <- S + 12
+}
+
+big_data = do.call(rbind, datalist)
+# or big_data <- dplyr::bind_rows(datalist)
+# or big_data <- data.table::rbindlist(datalist)
+
+
+# Plot graph
+ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve")
+  
+
+
+```
+
+
+$$
+R=e^{- \frac{t}{S}}
+$$
+
+$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory. $S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $t$ represents time.
+
+
+The Foregetting Curve: reticulate 
+==================================
+
+- reticulate is an R interface to python 
+- Python objects can be accessed from R by calling the variable `py$object_name`
+- R objects can be accessed from Python by calling the variable `r.object_name`
+
+Recall vs. Review
+=================
+[insert info on recall vs. review experiments]
+
+Practice recalling now
+======================
+- What is the reticulate package? 
+- How would you access a Python object, x, created in a Python chunk, from R with the reticulate package? 
+- How would you access a R object, x, created in a R chunk, from Python with the reticulate package?
+
+Strategies for taking advantage of the spacing effect
+=====================================================
+- Rule of thumb: recall 2x on day 1, 1x on day 2, 1x the week after
+- Use technology to help you: Spaced Repition System software, such as Anki
+- Increase the stickyness factor $S$: write code you wish to remember rather than copy, increase your understanding.
+
+
+Word frequency lists
+=====================
 
 
