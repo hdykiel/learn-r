@@ -36,8 +36,7 @@ incremental: true
 # cannot allocate vector of size 3.1 gb
 ```
 
-
-What is that function again?
+Remember the useful
 ========================================================
 
 Memory: it's normal to forget
@@ -56,7 +55,7 @@ Your brain knows what's important
 
 * Does it have meaning?
 * Is it memorable?
-* Recall frequency
+* How often does it need to be retrieved?
 
 
 The Forgetting Curve
@@ -94,7 +93,7 @@ big_data = do.call(rbind, datalist)
 
 
 # Plot graph
-ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+ggplot(data = big_data[big_data$i == 0,], aes(x = days, y = retrievability, color = i, group = i)) +
   scale_y_continuous(labels = scales::percent) +
   geom_line() +
   geom_hline(yintercept = 0.25, color = "red") +
@@ -109,19 +108,73 @@ $$
 R=e^{- \frac{t}{S}}
 $$
 
-$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory. $S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $t$ represents time.
+$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory.  $S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $t$ represents time.
 
 
-The Foregetting Curve: reticulate 
+The Forgetting Curve: reticulate 
 ==================================
 
-- reticulate is an R interface to python 
+- reticulate is an R interface to python
+- use reticulate to call Python from R in a variety of ways including R Markdown, sourcing Python scripts, importing Python modules, and using Python interactively within an R session.
 - Python objects can be accessed from R by calling the variable `py$object_name`
 - R objects can be accessed from Python by calling the variable `r.object_name`
 
+***
+
+```{r, echo = FALSE, messages = FALSE, fig.width= 12, fig.height=9}
+# Plot graph
+ggplot(data = big_data[big_data$i==0, ], aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve") +
+  # add point in time
+  annotate("text", x = 1, y = 1, label = "reticulate")
+```
+
+
+
 Recall vs. Review
 =================
-[insert info on recall vs. review experiments]
+```{r}
+# page 30: 35% will be rememembered with recall
+```
+Would you rather study a list of foreign words (or R functions) for 10 minutes or study the list for 5 minutes and trade it for a blank sheet of paper and pencil (or keyboard)?
+
+
+<div align="center">
+<img src="pictures/clock.jpeg" width=600 height=400>
+</div>
+
+***
+
+<div align="center">
+<img src="pictures/5minsclock.png" width=500 height=300>
+</div>
+
+
+Waiting until the last minute is a good way to practice
+========================================================
+
+- "There is a complex balance between the advantages of nearly forgetting and the disadvantages of actually forgetting" -Gabriel Wyner
+
+```{r, echo=FALSE, messages = FALSE, fig.width = 20}
+library(tibble)
+df <- tribble(~timing.of.recall.practice, ~percent.remembered,
+              "Immediate", 0.27,
+              "1 Day Later", 0.35,
+              "1 Week Later", 0.50,
+              "4 Weeks Later", 0.58,
+              "12 Weeks Later", 0.45)
+
+df$timing.of.recall.practice <- factor(df$timing.of.recall.practice, levels = c("Immediate", "1 Day Later", "1 Week Later", "4 Weeks Later","12 Weeks Later" ))
+
+
+ggplot(df, aes(timing.of.recall.practice, percent.remembered)) + geom_bar(stat="identity")
+
+# add source: page 40
+
+```
 
 Practice recalling now
 ======================
@@ -129,14 +182,58 @@ Practice recalling now
 - How would you access a Python object, x, created in a Python chunk, from R with the reticulate package? 
 - How would you access a R object, x, created in a R chunk, from Python with the reticulate package?
 
+```{r, echo = FALSE, messages = FALSE, fig.width= 12, fig.height=9}
+# Plot graph
+ggplot(data = big_data[big_data$i %in% c(0,5), ], aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve") +
+  # add point in time
+  annotate("text", x = 5, y = 1, label = "reticulate")
+```
+
+
+
 Strategies for taking advantage of the spacing effect
 =====================================================
 - Rule of thumb: recall 2x on day 1, 1x on day 2, 1x the week after
-- Use technology to help you: Spaced Repition System software, such as Anki
+- Use technology to help you: Spaced Repetion System software, such as Anki
 - Increase the stickyness factor $S$: write code you wish to remember rather than copy, increase your understanding.
 
+```{r, echo = FALSE, messages = FALSE, fig.width= 20, fig.height=9}
+# Plot graph
+ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve") +
+  # add point in time
+  annotate("text", x = 5, y = 1, label = "reticulate")
+```
+
+Anki
+=====
+[Insert screenshot]
+
+Don't copy and paste, write instead
+==================================
+[Insert 2 forgetting curves with different S factor]
+[Talk about multi-sensory experiences. Be mindful of how you write code - extra effort can have returns in the long run]
 
 Word frequency lists
 =====================
+- be strategic about which concepts you commit to long term memory
+- 80/20 rule: focus on information and concepts which will have the biggest impact
+
+[reticulate package documentation]("https://cran.r-project.org/web/packages/reticulate/reticulate.pdf")
+
+
+Summary
+=======
+- Employing specific memory and learning techniques can supercharge your memory
+- Understand the forgetting curve and adapt your learning strategies to use it to your advantage. Recall over review.
+- Focus on internalizing information and concepts which will be most useful to you
+
 
 
