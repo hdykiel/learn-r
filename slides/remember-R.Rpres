@@ -21,7 +21,11 @@ Working memory vs. long term memory
 - working memory: limited space 
 - long term memory: a quadrillion connections (15,000,000,000,000,000)
 
+*** 
 
+<div align="center">
+<img src="pictures/memory.jpg" width=700 height=600>
+</div>
 
 The purpose of forgetting
 ========================================================
@@ -108,7 +112,7 @@ $$
 R=e^{- \frac{t}{S}}
 $$
 
-$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory.  $S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $t$ represents time.
+$R$ is retrievability, a measure of how easy it is to retrieve a piece of information from memory. $\ S$ is stability of memory, which determines how fast $R$ falls over time in absence of training, testing, or other recall. $\ t$ represents time.
 
 
 The Forgetting Curve: reticulate 
@@ -136,7 +140,7 @@ ggplot(data = big_data[big_data$i==0, ], aes(x = days, y = retrievability, color
 
 Recall vs. Review
 =================
-```{r}
+```{r, include = FALSE}
 # page 30: 35% will be rememembered with recall
 ```
 Would you rather study a list of foreign words (or R functions) for 10 minutes or study the list for 5 minutes and trade it for a blank sheet of paper and pencil (or keyboard)?
@@ -176,6 +180,26 @@ ggplot(df, aes(timing.of.recall.practice, percent.remembered)) + geom_bar(stat="
 
 ```
 
+
+
+Strategies for taking advantage of the spacing effect
+=====================================================
+- **Rule of thumb: recall twice on day 1, once on day 2, once the week after**
+- Use technology to help you: Spaced Repetion System software, such as Anki
+- Increase the stickyness factor $S$
+
+```{r, echo = FALSE, messages = FALSE, fig.width= 20, fig.height=9}
+# Plot graph
+ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve") +
+  # add point in time
+  annotate("text", x = 5, y = 1, label = "reticulate")
+```
+
+
 Practice recalling now
 ======================
 - What is the reticulate package? 
@@ -194,32 +218,53 @@ ggplot(data = big_data[big_data$i %in% c(0,5), ], aes(x = days, y = retrievabili
 ```
 
 
-
-Strategies for taking advantage of the spacing effect
+Strategies for taking advantage of the spacing effect: use SRS software
 =====================================================
-- Rule of thumb: recall 2x on day 1, 1x on day 2, 1x the week after
-- Use technology to help you: Spaced Repetion System software, such as Anki
+- Rule of thumb: recall twice on day 1, once on day 2, once the week after
+- **Use technology to help you: Spaced Repetion System software, such as Anki**
 - Increase the stickyness factor $S$: write code you wish to remember rather than copy, increase your understanding.
 
-```{r, echo = FALSE, messages = FALSE, fig.width= 20, fig.height=9}
-# Plot graph
-ggplot(data = big_data, aes(x = days, y = retrievability, color = i, group = i)) +
+<div align="center">
+<img src="pictures/Anki.jpg" width=550 height=500>
+</div>
+
+Strategies for taking advantage of the spacing effect: improve S 
+==================================
+
+- Don't copy and paste, write instead
+- Don't review, recall
+- Increase meaning
+
+```{r, echo = FALSE, messages = FALSE, fig.width= 10, fig.height=8}
+# Plot graph w/ S = 3
+ggplot(data = big_data[big_data$i==0, ], aes(x = days, y = retrievability, color = i, group = i)) +
   scale_y_continuous(labels = scales::percent) +
   geom_line() +
   geom_hline(yintercept = 0.25, color = "red") +
-  ggtitle(label = "The Forgetting Curve") +
-  # add point in time
-  annotate("text", x = 5, y = 1, label = "reticulate")
+  ggtitle(label = "The Forgetting Curve")
+
 ```
 
-Anki
-=====
-[Insert screenshot]
+***
 
-Don't copy and paste, write instead
-==================================
-[Insert 2 forgetting curves with different S factor]
-[Talk about multi-sensory experiences. Be mindful of how you write code - extra effort can have returns in the long run]
+```{r, echo = FALSE, messages = FALSE, fig.width= 10, fig.height=8}
+
+# Plot graph w/ S = 10
+S <- 25 # original stickiness of memory (stability)
+t <- c(0:30) # time in days
+
+R <- sapply(t, function(x) exp(1)^(-x/S)) # calculate retrievability
+
+df <- data.frame(t, R, recall.number = 0)
+names(df) <- c("days", "retrievability")
+
+ggplot(data = df, aes(x = days, y = retrievability)) +
+  scale_y_continuous(labels = scales::percent) +
+  geom_line() +
+  geom_hline(yintercept = 0.25, color = "red") +
+  ggtitle(label = "The Forgetting Curve with a higher S factor")
+```
+
 
 Word frequency lists
 =====================
@@ -228,12 +273,28 @@ Word frequency lists
 
 [reticulate package documentation]("https://cran.r-project.org/web/packages/reticulate/reticulate.pdf")
 
+```{r, echo=FALSE, messages = FALSE, warnings = FALSE}
+library(wordcloud)
+library(readr)
+d <- read_csv("../data/word_freq.csv")
+wordcloud(words = d$Function.Name, freq = d$Freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+
+```
 
 Summary
 =======
-- Employing specific memory and learning techniques can supercharge your memory
-- Understand the forgetting curve and adapt your learning strategies to use it to your advantage. Recall over review.
-- Focus on internalizing information and concepts which will be most useful to you
+- Employing specific memory and learning techniques can supercharge your memory.
+- Understand the forgetting curve and adapt your learning strategies to use it to your advantage. Recall over review, practice just before you forget, activate your senses.
+- Focus on internalizing information and concepts which will be most useful to you.
 
 
+
+Works Cited
+===============
+
+<div align="center">
+<img src="pictures/books.jpg" width=700 height=700>
+</div>
 
